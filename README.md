@@ -1,2 +1,2 @@
 # public_key_covert_channel
-Using a Public Key Handshake to transmit a covert channel
+The group will be creating a covert channel that uses public keys to transmit information during secure handshake processes. The channel will be developed to as closely as possible mimic the types of ambient key exchanges a network administrator might expect to see frequently occurring, thus minimizing the threat of detection. This project will include the implementation of the channel, from both the sender and receiver side, a discussion of its capabilities in terms of bandwidth and robustness, and analysis of possible prevention or detection.

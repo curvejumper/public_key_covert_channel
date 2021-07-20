@@ -10,6 +10,7 @@ in length and appears less suspicious.
 """
 import argparse
 from Crypto.PublicKey import RSA
+import ssl
 import socket
 import sys
 import struct
@@ -62,9 +63,14 @@ def main():
 	print(f"Connecting to: {args.hostname}:{args.port}")
 	sock = connect(args.hostname, args.port)
 
-	print(f"Sending message: {args.message}")
-	send_message(sock, args.message)
-	print("Done!")
+	context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+	# Error, here. Certificate verify is failing but it is connecting to server
+	with context.wrap_socket(sock, server_hostname=args.hostname) as ssock:
+		print(ssock.version())
+
+		print(f"Sending message: {args.message}")
+		send_message(ssock, args.message)
+		print("Done!")
 
 if __name__ == '__main__':
 	main()

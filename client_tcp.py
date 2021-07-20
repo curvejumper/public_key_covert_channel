@@ -54,9 +54,9 @@ def main():
 	# Parse arguments from the command line
 	print("Parsing arguments...")
 	parser = argparse.ArgumentParser(description='RSA Public Key Covert Channel (Raw TCP)')
-	parser.add_argument('hostname', help='Server address to send message', type=str)
-	parser.add_argument('port', help='Server port to connect to', type=str)
-	parser.add_argument('message', help='Message to send', type=str)
+	parser.add_argument('hostname', help='Server address to send message', type=str, nargs='?', default="127.0.0.1")
+	parser.add_argument('port', help='Server port to connect to', type=str, nargs='?', default="8443")
+	parser.add_argument('message', help='Message to send', type=str, nargs='?', default="Secret Message!")
 	args = parser.parse_args()
 
 	print(f"Connecting to: {args.hostname}:{args.port}")

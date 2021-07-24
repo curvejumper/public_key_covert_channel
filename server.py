@@ -56,6 +56,7 @@ def run_tls_server():
         sock.listen(5)
         with context.wrap_socket(sock, server_side=True) as ssock:
             conn, addr = ssock.accept()
+        print(f"connected on address: {addr}, conn: {conn}")
 
 if __name__ == "__main__":
 

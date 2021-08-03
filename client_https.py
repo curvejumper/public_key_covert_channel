@@ -34,7 +34,7 @@ def connect(hostname, port):
 
 def send_message(sock, message):
 	# https://tls.ulfheim.net
-	pre_formatted_packet = b'\x16\x03\x03\x00\x25 ' # record header (tls 1.2)
+	pre_formatted_packet = b'\x16\x03\x03\x00\x25' # record header (tls 1.2)
 	pre_formatted_packet += b'\x10' # handshake header (client key exchange)
 	encoded_message = message.encode('utf-8')
 	while len(encoded_message) != 0:

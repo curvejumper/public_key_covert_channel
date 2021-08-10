@@ -8,9 +8,8 @@ covert channel message is never constant
 in length and appears less suspicious.
 """
 import argparse
-from Crypto.PublicKey import RSA
+from Crypto.PublicKey import RSA # PIP install pycrypto
 import socket
-import sys
 import struct
 import base64
 
@@ -21,7 +20,8 @@ def gen_pub_key():
 	Returns an RSA public key.
 	"""
 	key = RSA.generate(RSA_BITS)
-	return key.publickey().export_key("DER")
+	pub_key = key.publickey()
+	return pub_key.exportKey()
 
 def connect(hostname, port):
 	"""
@@ -34,9 +34,11 @@ def connect(hostname, port):
 
 def send_message(sock, message):
 	# https://tls.ulfheim.net
-	pre_formatted_packet = b'\x16\x03\x03\x00\x25 ' # record header (tls 1.2)
+	pre_formatted_packet = b'\x16\x03\x03\x00\x25' # record header (tls 1.2)
 	pre_formatted_packet += b'\x10' # handshake header (client key exchange)
-	encoded_message = message.encode('utf-8')
+	# Encode message into base64
+	encoded_message = base64.b64encode(message.encode('utf-8'))
+
 	while len(encoded_message) != 0:
 		rsa_pub_key = gen_pub_key()
 
@@ -56,9 +58,9 @@ def main():
 	# Parse arguments from the command line
 	print("Parsing arguments...")
 	parser = argparse.ArgumentParser(description='RSA Public Key Covert Channel (Raw TCP)')
-	parser.add_argument('hostname', help='Server address to send message', type=str)
-	parser.add_argument('port', help='Server port to connect to', type=str)
-	parser.add_argument('message', help='Message to send', type=str)
+	parser.add_argument('hostname', help='Server address to send message', type=str, nargs='?', default="127.0.0.1")
+	parser.add_argument('port', help='Server port to connect to', type=str, nargs='?', default="4443")
+	parser.add_argument('message', help='Message to send', type=str, nargs='?', default="Secret Message!")
 	args = parser.parse_args()
 
 	print(f"Connecting to: {args.hostname}:{args.port}")
